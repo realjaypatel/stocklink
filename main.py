@@ -1,8 +1,14 @@
 from fastapi import FastAPI, Request
-from router import stock
-
 
 app = FastAPI()
 
 
-app.include_router(stock.router)
+import yfinance as yahooFinance
+
+
+
+@app.get("/ticker/{ticker}")
+async def read_root(ticker):
+    stockdata = yahooFinance.Ticker(ticker)
+    stockdata = stockdata.info
+    return {"data": stockdata}
